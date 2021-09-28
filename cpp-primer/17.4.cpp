@@ -25,7 +25,11 @@ class Sale_Book;
 typedef tuple<vector<Sale_Book>::size_type, vector<Sale_Book>::const_iterator, vector<Sale_Book>::const_iterator> matches;
 
 matches findBook(vector<vector<Sale_Book>>& files, string bookname) {
-	return
+	while(cin >> bookname ) {
+        for(auto itr = files.begin(), itr != files.end(); ++itr ) {
+            if( itr.)
+        }
+    }
 }
 
 int main( int argc, char* argv[] ){ 
