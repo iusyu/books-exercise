@@ -1,7 +1,10 @@
+#include <cstddef>
 #include <iostream>
+#include <ostream>
 #include <sstream>
 #include <thread>
 #include <map>
+#include <set>
 #include <vector>
 #include <string>
 
@@ -91,16 +94,50 @@ std::map<T,T> SupportXmlEncode(const std::map<T,T>& container)
     return tmp;
 }
 
+template<typename T>
+std::ostream& operator<<(std::ostream& sout, const std::vector<T>& container)
+{
+    typename std::vector<T>::const_iterator itr = container.cbegin();
+    sout << "[ ";
+    for( ; itr != container.cend(); ++itr )
+    {
+        sout << *itr <<", ";
+    }
+    return sout << " ]";
+}
 
+template<typename KT, typename VT>
+std::ostream& operator<<(std::ostream& sout, const std::map<KT,VT>& container)
+{
+    typename std::map<KT,VT>::const_iterator itr = container.cbegin();
+    sout << '{';
+    for ( ; itr != container.cend(); ++itr) {
+        sout << "\"" << itr->first << "\":\"" << itr->second << "\""; 
+    }
+    return sout << '}';
+}
 
+template<typename T>
+std::ostream& operator<<(std::ostream& sout, const std::set<T>& container)
+{
+    typename std::set<T>::const_iterator itr = container.cbegin();
+    sout << "( ";
+    for ( ; itr != container.cend(); ++itr) {
+        sout << *itr << ", "; 
+    }
+    sout << " )";
+    return sout;
+}
 
 
 void TEST_F() {
     std::string xmlstr = "djslfka&js\"dklfj<dj>dfj<dkfj";
     std::cout << SupportXmlEncode(xmlstr) << std::endl;
     std::vector<std::string> vecxmlstr (10, xmlstr);
+    std::vector<std::vector<std::string> > vec2dxmlstr (10, vecxmlstr);
     std::vector<std::string> tmpresult = SupportXmlEncode(vecxmlstr);
-    std::cout << tmpresult[0] << std::endl;
+    std::vector<std::vector<std::string> > tmp2dresult = SupportXmlEncode(vec2dxmlstr);
+    std::cout << tmpresult << std::endl;
 }
 
 
