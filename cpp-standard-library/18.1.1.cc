@@ -11,7 +11,26 @@ template<typename T>
 T SupportXmlEncode(const T& container)
 {
     T tmp = container;
-    if( tmp.empty() ) return tmp;
+    if( tmp.empty() ) return tmp; 
+    typename T::size_type pos = 0;
+    for (size_t i = 0; i < 10000; ++i)
+    {
+        pos = tmp.find_first_of("\"&<>", pos);
+        if (pos == T::npos) break;
+        T replacement;
+        switch (tmp[pos])
+        {
+        case '\"': replacement = "&quot;"; break;   
+        case '&':  replacement = "&amp;";  break;   
+        case '<':  replacement = "&lt;";   break;   
+        case '>':  replacement = "&gt;";   break;   
+        default: ;
+        }
+        tmp.replace(pos, 1, replacement);
+        //std::cout << tmp << std::endl;
+        pos += replacement.size();
+        replacement.clear();
+    };
     return tmp;
 }
 
@@ -35,37 +54,37 @@ std::string SupportXmlEncode(const std::string& container) {
         default: ;
         }
         tmp.replace(pos, 1, replacement);
-        std::cout << tmp << std::endl;
+        //std::cout << tmp << std::endl;
         pos += replacement.size();
         replacement.clear();
     };
     return tmp;
 }
 
-template<>
-std::vector<std::string> SupportXmlEncode(const std::vector<std::string>& container)
+template<typename T>
+std::vector<T> SupportXmlEncode(const std::vector<T>& container)
 {
-    std::vector<std::string> tmp = container;
+    std::vector<T> tmp = container;
     if( tmp.empty() ) return tmp;
-    for(std::vector<std::string>::iterator itr = tmp.begin();
+    for(typename std::vector<T>::iterator itr = tmp.begin();
         itr != tmp.end(); ++itr )
     {
-        std::string tmp = SupportXmlEncode<std::string>(*itr);
+        T tmp = SupportXmlEncode(*itr);
         (*itr).clear();
         (*itr) = tmp;
     }
     return tmp;
 }
 
-template<>
-std::map<std::string,std::string> SupportXmlEncode(const std::map<std::string,std::string>& container)
+template<typename T>
+std::map<T,T> SupportXmlEncode(const std::map<T,T>& container)
 {
-    std::map<std::string,std::string> tmp = container;
+    std::map<T,T> tmp = container;
     if( tmp.empty() ) return tmp;
-    for(std::map<std::string,std::string>::iterator itr = tmp.begin();
+    for(typename std::map<T,T>::iterator itr = tmp.begin();
         itr != container.end(); ++itr )
     {
-        std::string tmp = SupportXmlEncode<std::string>(itr->second);
+        T tmp = SupportXmlEncode(itr->second);
         (*itr).second.clear();
         (*itr).second += tmp;
     }

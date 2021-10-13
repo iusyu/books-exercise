@@ -26,7 +26,7 @@ std::string SupportXmlEncode(const std::string& container) {
         default: ;
         }
         tmp.replace(pos, 1, replacement);
-        std::cout << tmp << std::endl;
+        //std::cout << tmp << std::endl;
         pos += replacement.size();
         replacement.clear();
     };
