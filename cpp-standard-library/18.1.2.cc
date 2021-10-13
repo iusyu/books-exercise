@@ -7,16 +7,7 @@
 
 
 
-template<typename T>
-T SupportXmlEncode(const T& container)
-{
-    T tmp = container;
-    if( tmp.empty() ) return tmp;
-    return tmp;
-}
 
-
-template<>
 std::string SupportXmlEncode(const std::string& container) {
     std::string tmp = container;
     if( tmp.empty() ) return tmp; 
@@ -42,7 +33,6 @@ std::string SupportXmlEncode(const std::string& container) {
     return tmp;
 }
 
-template<>
 std::vector<std::string> SupportXmlEncode(const std::vector<std::string>& container)
 {
     std::vector<std::string> tmp = container;
@@ -50,14 +40,13 @@ std::vector<std::string> SupportXmlEncode(const std::vector<std::string>& contai
     for(std::vector<std::string>::iterator itr = tmp.begin();
         itr != tmp.end(); ++itr )
     {
-        std::string tmp = SupportXmlEncode<std::string>(*itr);
+        std::string tmp = SupportXmlEncode(*itr);
         (*itr).clear();
         (*itr) = tmp;
     }
     return tmp;
 }
 
-template<>
 std::map<std::string,std::string> SupportXmlEncode(const std::map<std::string,std::string>& container)
 {
     std::map<std::string,std::string> tmp = container;
@@ -65,7 +54,7 @@ std::map<std::string,std::string> SupportXmlEncode(const std::map<std::string,st
     for(std::map<std::string,std::string>::iterator itr = tmp.begin();
         itr != container.end(); ++itr )
     {
-        std::string tmp = SupportXmlEncode<std::string>(itr->second);
+        std::string tmp = SupportXmlEncode(itr->second);
         (*itr).second.clear();
         (*itr).second += tmp;
     }
